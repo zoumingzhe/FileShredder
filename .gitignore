@@ -6,5 +6,7 @@ pyshredder/pyshredder.egg-info/
 pyshredder/pyshredder/core/__pycache__/
 
 example/ex_file/eraser
+example/ex_file/shredder
 
 test/ts_file/eraser
+test/ts_file/shredder

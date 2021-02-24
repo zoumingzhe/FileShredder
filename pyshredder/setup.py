@@ -18,19 +18,19 @@ except ImportError:
 setup(
     name="pyshredder",
     description="python file shredder",
-    version="0.1.0",
+    version="0.1.2",
     author="Zou Mingzhe",
     author_email="zoumingzhe@qq.com",
     url="https://github.com/zoumingzhe/ztools",
     packages=[
         'pyshredder',
         'pyshredder.core',
+        'pyshredder.util',
     ],
     license="MIT",
     long_description=open('..\README.rst', mode='r', encoding='UTF-8').read(),
     install_requires=[
-        'xlrd',
-        'xlwt',
+        'ztools',
     ],
     classifiers=[
         'Development Status :: 5 - Production/Stable',
