@@ -1,9 +1,9 @@
 
-ztools/build/
-ztools/dist/
-ztools/ztools.egg-info/
+pyshredder/build/
+pyshredder/dist/
+pyshredder/pyshredder.egg-info/
 
-ztools/ztools/core/__pycache__/
+pyshredder/pyshredder/core/__pycache__/
 
 example/ex_file/eraser
 
