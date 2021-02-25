@@ -18,7 +18,7 @@ except ImportError:
 setup(
     name="pyshredder",
     description="python file shredder",
-    version="0.1.2",
+    version="0.1.4",
     author="Zou Mingzhe",
     author_email="zoumingzhe@qq.com",
     url="https://github.com/zoumingzhe/ztools",

@@ -26,6 +26,7 @@ class shredder(eraser, hash, tprint):
         毁灭模式（'destroy'）
     """
     def __init__(self, mode = 'standard'):
+        # print("%s init mode:%s"%(self.__class__.__name__, mode))
         eraser.__init__(self)
         tprint.__init__(self)
         self.__version = "0.1"
@@ -145,19 +146,25 @@ class shredder(eraser, hash, tprint):
             return False
         return True
 # ----------------------------------------------------------------------------------------------------
-    def file(self, path, check = False, delete = True):
+    @staticmethod
+    def file(path, mode = 'standard', check = False, delete = True):
         """
         文件删除：
-        输入参数：path 文件路径， check 是否校验， delete 是否删除
+        输入参数：path 文件路径， mode模式， check 是否校验， delete 是否删除
         返回参数：True 成功， False 失败
         说明：该方法通过对文件先覆写数据、再重命名、最后删除系列操作确保文件数据被可靠删除。
         """
+        # 判断模式是否正确
+        if mode not in ('fast', 'standard', 'safe', 'destroy'):
+            tprint.std("mode (fast, standard, safe, destroy) not support %s"%mode)
+            return False
         # 判断文件是否存在
         if not os.path.exists(path):
             return False
-        if not self.eraser(path, check = check):
+        s = shredder(mode)
+        if not s.eraser(path, check = check):
             return False
-        if not self.rename(path):
+        if not s.rename(path):
             return False
         if delete:
             if not os.path.isfile(path):
