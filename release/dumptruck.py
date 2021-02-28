@@ -11,8 +11,8 @@ def test(value1, value2=None):
 
 threads = []
 thdclass = namedtuple('thread', 'tno future')
-thdpool = ThreadPoolExecutor(max_workers=4, thread_name_prefix="THD")
-for i in range(0,10):
+thdpool = ThreadPoolExecutor(max_workers=50, thread_name_prefix="THD")
+for i in range(0,10000):
     future = thdpool.submit(test,i,i+1)
     tclass = thdclass(i,future)
     threads.append(tclass)

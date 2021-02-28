@@ -25,12 +25,16 @@ class shredder(eraser, hash, tprint):
         安全模式（'safe'）
         毁灭模式（'destroy'）
     """
+# ----------------------------------------------------------------------------------------------------
     def __init__(self, mode = 'standard'):
         # print("%s init mode:%s"%(self.__class__.__name__, mode))
         eraser.__init__(self)
         tprint.__init__(self)
         self.__version = "0.1"
         self.__mode = mode
+# ----------------------------------------------------------------------------------------------------
+    # def __del__(self):
+    #     # print("%s del"%(self.__class__.__name__))
 # ----------------------------------------------------------------------------------------------------
     def eraser(self, path, loop = 1, check = False):
         """
