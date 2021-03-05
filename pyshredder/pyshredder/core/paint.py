@@ -33,8 +33,8 @@ class paint:
         data = []
         # 生成随机数据
         for idx in range(length):
-            randint = random.randint(0,255)idx
-            data.append(randint + idx)
+            randint = random.randint(0,255)
+            data.append(randint)
         return bytes(data)
 # ----------------------------------------------------------------------------------------------------
     def painting(self, path, sum_size, block_size = 4096, block_num = 1024):
@@ -53,14 +53,13 @@ class paint:
             return False
         # 生成填充文件
         size = 0
-        while (size < sum_size)
-        {
+        while (size < sum_size):
             # 生成文件名
             namebytes = (str(int(time.time()*100))).encode("utf-8")
             name = base64.b64encode(namebytes).decode("utf-8")[:16]
             file = path + str('\\%s.dat' % name)
             # 文件是否存在？
-            if not os.path.exists(file):
+            if os.path.exists(file):
                 continue
             # 生成填充数据
             data = self.__random_block(block_size)
@@ -73,6 +72,5 @@ class paint:
                     f.write(data)
                     f.flush()
                 size = size + block_size * num
-        }
         return True
 # ----------------------------------------------------------------------------------------------------
