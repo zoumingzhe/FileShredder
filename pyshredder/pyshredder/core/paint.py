@@ -14,6 +14,10 @@ import os
 import time
 import random
 import base64
+import psutil
+from ztools import fbasic
+from collections import namedtuple
+from concurrent.futures import ThreadPoolExecutor
 # ----------------------------------------------------------------------------------------------------
 class paint:
     """
@@ -23,7 +27,8 @@ class paint:
         self.__version = "0.1"
         self.__align = 4096
 # ----------------------------------------------------------------------------------------------------
-    def __random_block(self, length):
+    @staticmethod
+    def __random_block(length):
         """
         生成随机数据块：
         输入参数：length 数据块长度
@@ -37,7 +42,8 @@ class paint:
             data.append(randint)
         return bytes(data)
 # ----------------------------------------------------------------------------------------------------
-    def painting(self, path, sum_size, block_size = 4096, block_num = 1024):
+    @staticmethod
+    def painting(path, sum_size, block_size = 4096, block_num = 1024):
         """
         随机擦除（块）：
         输入参数：path 文件路径
@@ -62,7 +68,7 @@ class paint:
             if os.path.exists(file):
                 continue
             # 生成填充数据
-            data = self.__random_block(block_size)
+            data = paint.__random_block(block_size)
             # print("fill data:", data)
             # 对文件用二进制随机数（块）覆写
             with open(file, "wb+") as f:
@@ -73,4 +79,33 @@ class paint:
                     f.flush()
                 size = size + block_size * num
         return True
+# ----------------------------------------------------------------------------------------------------
+    @staticmethod
+    def disks(percent = 97.0):
+        """
+        硬盘剩余空间填充：
+        输入参数：percent 填充百分比
+        返回参数：
+        说明：该方法对所有硬盘剩余空间进行随机数据填充。
+        """
+        threads = []
+        thdwork = namedtuple('thread', 'tno future')
+        thdpool = ThreadPoolExecutor(max_workers=50, thread_name_prefix="THD")
+        disks = psutil.disk_partitions()
+        for disk in disks:
+            # 生成文件名
+            namebytes = (str(int(time.time()*100))).encode("utf-8")
+            name = base64.b64encode(namebytes).decode("utf-8")[:16]
+            path = disk.device + name
+            print(path)
+            fbasic.ensure(path)
+            psutil.disk_usage(disk.device)
+            while True:
+                disk_pt = psutil.disk_usage(disk.device).percent
+                if disk_pt >= percent:
+                    break
+                print(disk.device, disk_pt)
+                future = thdpool.submit(paint.painting,path,100*1024*1024)
+                # paint.painting(path, sum_size = 100*1024*1024)
+            bar.EOF()
 # ----------------------------------------------------------------------------------------------------
