@@ -30,6 +30,7 @@ setup(
     license="MIT",
     long_description=open('..\README.rst', mode='r', encoding='UTF-8').read(),
     install_requires=[
+        'psutil',
         'ztools',
     ],
     classifiers=[

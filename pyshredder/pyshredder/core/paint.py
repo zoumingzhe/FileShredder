@@ -88,9 +88,11 @@ class paint:
         返回参数：
         说明：该方法对所有硬盘剩余空间进行随机数据填充。
         """
-        threads = []
-        thdwork = namedtuple('thread', 'tno future')
-        thdpool = ThreadPoolExecutor(max_workers=50, thread_name_prefix="THD")
+        # threads = []
+        # thdwork = namedtuple('thread', 'tno future')
+        cpu_num = psutil.cpu_count()
+        thd_num = cpu_num * 4 
+        thdpool = ThreadPoolExecutor(max_workers=thd_num, thread_name_prefix="THD")
         disks = psutil.disk_partitions()
         for disk in disks:
             # 生成文件名
@@ -100,12 +102,15 @@ class paint:
             print(path)
             fbasic.ensure(path)
             psutil.disk_usage(disk.device)
+            display_pt = psutil.disk_usage(disk.device).percent
             while True:
                 disk_pt = psutil.disk_usage(disk.device).percent
                 if disk_pt >= percent:
                     break
-                print(disk.device, disk_pt)
+                if disk_pt > display_pt:
+                    print(disk.device, display_pt, 'CPU:', psutil.cpu_percent()) 
+                    display_pt = disk_pt
                 future = thdpool.submit(paint.painting,path,100*1024*1024)
                 # paint.painting(path, sum_size = 100*1024*1024)
-            bar.EOF()
+        thdpool.shutdown(wait=True)
 # ----------------------------------------------------------------------------------------------------
